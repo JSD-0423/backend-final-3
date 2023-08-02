@@ -14,6 +14,7 @@ function validateEnv(): void {
     PORT: port(),
     DB_DAILECT: str(),
     DB_HOST: str(),
+    DB_PORT: port(),
     DB_USERNAME: str(),
     DB_PASS: str(),
     DB_NAME: str(),

@@ -1,13 +1,12 @@
 # syntax=docker/dockerfile:1
 
-FROM node:16.18.1-alpine3.15
-
+FROM node:18.17.0-alpine
 WORKDIR /usr/app
-COPY . .
+COPY package.json .
 RUN yarn install
+COPY . .
+RUN apk update && apk add bash
 RUN yarn build:tsc
-RUN sequelize db:create
-RUN sequelize db:seed:all
 
-CMD [ "yarn","start" ]
 EXPOSE 5000
+CMD [ "yarn","dev" ]
