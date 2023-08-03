@@ -1,0 +1,55 @@
+version: '3'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  # MySQL Database
+  db:
+    image: mysql:8.0.33
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    expose:
+      - "3306"
+
+    env_file:
+      - ./.env
+    ports:
+      - "3307:3306"
+    networks:
+      - app-tier
+    environment:
+      - MYSQL_ROOT_PASSWORD=$DB_PASS
+      - MYSQL_DATABASE=$DB_NAME
+    stdin_open: true
+    tty: true
+    volumes:
+      - db:/var/lib/mysql
+  # Express App
+  web:
+    # build:
+    #   context: ./
+    #   dockerfile: ./Dockerfile
+    image: muhammadalabadsa/store
+    depends_on:
+      - db
+    command: bash -c 'while !</dev/tcp/db/3306; do sleep 1; done; npm start'
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./.env
+    networks:
+      - app-tier
+    environment:
+      - NODE_ENV=development
+      - DB_DAILECT=$DB_DAILECT
+      - DB_HOST=$DB_HOST
+      - DB_USERNAME=$DB_USERNAME
+      - DB_PASS=$DB_PASS
+      - DB_NAME=$DB_NAME
+      - DB_LOGGING=$DB_LOGGING
+      - DB_PORT=3306
+  
+volumes:
+  db:

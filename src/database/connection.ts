@@ -18,6 +18,7 @@ const { database } = config;
 const connection = new Sequelize({
   dialect: database.dialect,
   host: database.host,
+  port: database.port,
   username: database.username,
   password: database.password,
   database: database.database,
