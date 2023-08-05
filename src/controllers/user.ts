@@ -154,3 +154,24 @@ export const login = async (
     next(error);
   }
 };
+
+export const logout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const { password, email } = req.body;
+  const { httpStatus, expire } = constants;
+  const { authResponse, token } = messages;
+  try {
+    res
+      .status(httpStatus.OK)
+      .clearCookie(token.ACCESS_TOKEN || 'accessToken')
+      .json({
+        success: true,
+        message: authResponse.LOGOUT,
+      });
+  } catch (error) {
+    next(error);
+  }
+};
