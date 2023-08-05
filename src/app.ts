@@ -18,7 +18,6 @@ import {
   UserOrderRouters,
 } from '@routes/index';
 import { notFound, serverError } from '@middlewares/index';
-import { UserOrder } from './models/UserOrder';
 
 const { port, nodeEnv } = config.server;
 
